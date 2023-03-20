@@ -24,7 +24,7 @@ const AccountModal = ({ isOpen, closeModal }) => {
   const { data } = useBalance({
     address: address,
   });
-  const { onCopy, value, setValue, hasCopied } = useClipboard(address);
+  const { onCopy, hasCopied } = useClipboard(address);
 
   return (
     <div>

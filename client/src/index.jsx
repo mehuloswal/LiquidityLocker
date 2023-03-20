@@ -10,9 +10,13 @@ import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-const { chains, provider } = configureChains([localhost], [publicProvider()]);
+const { chains, provider, webSocketProvider } = configureChains(
+  [localhost],
+  [publicProvider()]
+);
 const { ToastContainer, toast } = createStandaloneToast();
 const client = createClient({
+  autoConnect: false,
   connectors: [
     new MetaMaskConnector({
       chains,
@@ -27,13 +31,13 @@ const client = createClient({
         appName: 'wagmi',
       },
     }),
-    // new InjectedConnector({
-    //   chains,
-    //   options: {
-    //     name: 'Injected',
-    //     shimDisconnect: true,
-    //   },
-    // }),
+    new InjectedConnector({
+      chains,
+      options: {
+        name: 'Injected',
+        shimDisconnect: true,
+      },
+    }),
     new WalletConnectConnector({
       chains,
       options: {
@@ -41,8 +45,8 @@ const client = createClient({
       },
     }),
   ],
-  autoConnect: false,
   provider,
+  webSocketProvider,
 });
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

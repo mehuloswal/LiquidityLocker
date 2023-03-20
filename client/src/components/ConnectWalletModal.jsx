@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   VStack,
-  HStack,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -9,8 +8,6 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  Text,
-  Image,
 } from '@chakra-ui/react';
 import { useConnect } from 'wagmi';
 export default function ConnectWalletModal({ isOpen, closeModal }) {
