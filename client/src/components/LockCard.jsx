@@ -36,12 +36,13 @@ const LockCard = ({ data }) => {
       !toast.isActive(unlockTokensData.hash) &&
         toast({
           id: unlockTokensData.hash,
-          title: 'UnLocked Successfully',
-          description: 'Your Tokens have been unlocked!',
+          title: 'Unlocked Successfully',
+          description:
+            'Your Tokens have been unlocked and are sent back to your address!',
           status: 'success',
           duration: '5000',
           isClosable: 'true',
-          position: 'bottom',
+          position: 'bottom-right',
         });
     },
   });

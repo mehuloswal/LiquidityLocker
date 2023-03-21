@@ -22,6 +22,7 @@ import {
 } from '@chakra-ui/react';
 import Header from './Header';
 import Locker from '../contracts/Locker.json';
+import IERC20 from '../contracts/IERC20.json';
 import { useDebounce } from '../utils/hooks/useDebounce';
 
 const LiquidityLocker = () => {
@@ -40,6 +41,7 @@ const LiquidityLocker = () => {
   const debouncedSelector = useDebounce(selector, 500);
 
   const LockerABI = Locker.abi;
+  const IERC20ABI = IERC20.abi;
 
   const { config: LockerConfig } = usePrepareContractWrite({
     address: '0xE490Db015DD30e42cBb519cBF5baD1d72000006f',
@@ -92,7 +94,36 @@ const LiquidityLocker = () => {
         });
     },
   });
-  // console.log(process.env.REACT_APP_DEVELOPMENT_LOCKER_CONTRACT_ADDRESS);
+
+  const { config: ERC20Config } = usePrepareContractWrite({
+    address: contractAddress,
+    abi: IERC20ABI,
+    functionName: 'approve',
+    args: [debouncedContractAddress, parseInt(debouncedTokenAmount)],
+    enabled: Boolean(
+      debouncedContractAddress && debouncedTokenAmount && isConnected
+    ),
+    onSettled(data, error) {
+      console.log('Settled ERC20Config', { data, error });
+    },
+  });
+  const { data: ERC20Data, write: ERC20Write } = useContractWrite(ERC20Config);
+  const { isLoading: isApprovingLoading } = useWaitForTransaction({
+    hash: ERC20Data?.hash,
+    onSuccess(data, error) {
+      !toast.isActive(ERC20Data.hash) &&
+        toast({
+          id: ERC20Data.hash,
+          title: 'Approved Successfully',
+          description: 'Tokens Approved Successfully',
+          status: 'info',
+          duration: '5000',
+          isClosable: 'true',
+          position: 'bottom',
+        });
+    },
+  });
+
   return (
     <Grid gap={5} templateRows='repeat(3,1fr)' placeItems='center'>
       <GridItem w='100%' h='100%' rowSpan={1}>
@@ -159,9 +190,10 @@ const LiquidityLocker = () => {
                     variant='outline'
                     colorScheme='blue'
                     w='full'
-                    isDisabled={!isConnected}
+                    isDisabled={!ERC20Write || isApprovingLoading}
+                    onClick={() => ERC20Write?.()}
                   >
-                    Approve
+                    {isApprovingLoading ? 'Approving...' : 'Approve'}
                   </Button>
                   <Button
                     colorScheme='blue'

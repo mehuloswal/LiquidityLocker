@@ -86,7 +86,9 @@ const LocksDrawer = ({ isOpen, onClose }) => {
                           )
                       )
                     ) : (
-                      <Text>No locks found</Text>
+                      <Text as='b' fontSize='3xl' opacity={0.7}>
+                        No locks found!
+                      </Text>
                     )}
                   </VStack>
                 </TabPanel>
