@@ -44,8 +44,11 @@ module.exports = {
       // favicon: './public/favicon.ico',
     }),
     new webpack.DefinePlugin({
-      'process.env.DEVELOPMENT_LOCKER_CONTRACT_ADDRESS': JSON.stringify(
-        '0xE490Db015DD30e42cBb519cBF5baD1d72000006f'
+      'process.env.DEVELOPMENT_ERC20LOCKER_CONTRACT_ADDRESS': JSON.stringify(
+        '0xf85983340dE2c9016F84824A5C747fD80AC0E213'
+      ),
+      'process.env.DEVELOPMENT_LPLOCKER_CONTRACT_ADDRESS': JSON.stringify(
+        '0x97b8B9a6Df65f09a1ABBFC51807380689Ead6Ed0'
       ),
     }),
   ],

@@ -16,17 +16,20 @@ import {
   Divider,
   useToast,
 } from '@chakra-ui/react';
-import Locker from '../contracts/Locker.json';
-const LockerABI = Locker.abi;
-const LockCard = ({ data }) => {
+
+import LPLocker from '../contracts/LPLocker.json';
+const LPLockerABI = LPLocker.abi;
+
+const LPLockCard = ({ data }) => {
   const toast = useToast();
   const debouncedLockId = useDebounce(data.id, 500);
   const { config } = usePrepareContractWrite({
-    address: process.env.DEVELOPMENT_LOCKER_CONTRACT_ADDRESS,
-    abi: LockerABI,
+    address: process.env.DEVELOPMENT_LPLOCKER_CONTRACT_ADDRESS,
+    abi: LPLockerABI,
     functionName: 'unlockTokens',
     args: [parseInt(debouncedLockId)],
     enabled: Boolean(debouncedLockId),
+    structuralSharing: (prev, next) => (prev === next ? prev : next),
   });
   const { data: unlockTokensData, write } = useContractWrite(config);
 
@@ -80,4 +83,4 @@ const LockCard = ({ data }) => {
   );
 };
 
-export default LockCard;
+export default LPLockCard;

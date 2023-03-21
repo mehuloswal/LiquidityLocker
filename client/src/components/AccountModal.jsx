@@ -50,11 +50,11 @@ const AccountModal = ({ isOpen, closeModal }) => {
               </Tooltip>
               {isConnected && (
                 <>
-                  <Text mt='0' as='b' fontSize='sm' color='blackAlpha.600'>
+                  <Text mt='0' as='b' fontSize='sm' opacity={0.6}>
                     {data?.formatted} {data?.symbol}
                   </Text>
                   <HStack>
-                    <Text fontSize='sm' color='blackAlpha.400'>
+                    <Text fontSize='sm' opacity={0.4}>
                       Connected to :
                     </Text>
                     <Text fontSize='sm' color='green.400'>

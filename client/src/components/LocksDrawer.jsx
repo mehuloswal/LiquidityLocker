@@ -17,9 +17,14 @@ import {
 } from '@chakra-ui/react';
 
 import { useContractRead, useAccount } from 'wagmi';
-import Locker from '../contracts/Locker.json';
+
+import ERC20LockCard from './ERC20LockCard';
+import LPLockCard from './LPLockCard';
+
 import { parse } from '../utils/common/parser';
-import LockCard from './LockCard';
+
+import ERC20Locker from '../contracts/ERC20Locker.json';
+import LPLocker from '../contracts/LPLocker.json';
 
 const lockMapping = [
   { key: 'id', type: 'number' },
@@ -30,24 +35,47 @@ const lockMapping = [
   { key: 'endDate', type: 'date' },
 ];
 
-const LockerABI = Locker.abi;
+const ERC20LockerABI = ERC20Locker.abi;
+const LPLockerABI = LPLocker.abi;
+
 const LocksDrawer = ({ isOpen, onClose }) => {
   const { address, isConnected } = useAccount();
 
-  const { data: returnedLocks, isLoading: isLoadingLocks } = useContractRead({
-    address: process.env.DEVELOPMENT_LOCKER_CONTRACT_ADDRESS,
-    abi: LockerABI,
-    functionName: 'getMyLocks',
-    args: [address],
-    enabled: isConnected,
-    watch: true,
-    onSettled(data, error) {
-      console.log('Settled', { data, error });
-    },
-    onError(err) {},
-  });
+  // -------------------ERC20 Locks
+  const { data: returnedERC20Locks, isLoading: isLoadingERC20Locks } =
+    useContractRead({
+      address: process.env.DEVELOPMENT_ERC20LOCKER_CONTRACT_ADDRESS,
+      abi: ERC20LockerABI,
+      functionName: 'getMyLocks',
+      args: [address],
+      enabled: isConnected,
+      watch: true,
+      onSettled(data, error) {
+        console.log('Settled', { data, error });
+      },
+      onError(err) {},
+    });
+  // -------------------LP Locks
+  const { data: returnedLPLocks, isLoading: isLoadingLPLocks } =
+    useContractRead({
+      address: process.env.DEVELOPMENT_LPLOCKER_CONTRACT_ADDRESS,
+      abi: LPLockerABI,
+      functionName: 'getMyLocks',
+      args: [address],
+      enabled: isConnected,
+      watch: true,
+      onSettled(data, error) {
+        console.log('Settled', { data, error });
+      },
+      onError(err) {},
+    });
 
-  const parsedData = returnedLocks ? parse(returnedLocks, lockMapping) : [];
+  const parsedERC20Data = returnedERC20Locks
+    ? parse(returnedERC20Locks, lockMapping)
+    : [];
+  const parsedLPData = returnedLPLocks
+    ? parse(returnedLPLocks, lockMapping)
+    : [];
 
   return (
     <>
@@ -71,18 +99,18 @@ const LocksDrawer = ({ isOpen, onClose }) => {
               <TabPanels>
                 <TabPanel>
                   <VStack spacing={2}>
-                    {isLoadingLocks && (
+                    {isLoadingERC20Locks && (
                       <>
                         <Skeleton height='150px' />
                         <Skeleton height='150px' />
                         <Skeleton height='150px' />
                       </>
                     )}
-                    {!isLoadingLocks && parsedData?.length ? (
-                      parsedData.map(
+                    {!isLoadingERC20Locks && parsedERC20Data?.length ? (
+                      parsedERC20Data.map(
                         (data) =>
                           data.amount > 0 && (
-                            <LockCard data={data} key={data.id} />
+                            <ERC20LockCard data={data} key={data.id} />
                           )
                       )
                     ) : (
@@ -93,7 +121,27 @@ const LocksDrawer = ({ isOpen, onClose }) => {
                   </VStack>
                 </TabPanel>
                 <TabPanel>
-                  <p>two!</p>
+                  <VStack spacing={2}>
+                    {isLoadingLPLocks && (
+                      <>
+                        <Skeleton height='150px' />
+                        <Skeleton height='150px' />
+                        <Skeleton height='150px' />
+                      </>
+                    )}
+                    {!isLoadingLPLocks && parsedLPData?.length ? (
+                      parsedLPData.map(
+                        (data) =>
+                          data.amount > 0 && (
+                            <LPLockCard data={data} key={data.id} />
+                          )
+                      )
+                    ) : (
+                      <Text as='b' fontSize='3xl' opacity={0.7}>
+                        No locks found!
+                      </Text>
+                    )}
+                  </VStack>
                 </TabPanel>
               </TabPanels>
             </Tabs>

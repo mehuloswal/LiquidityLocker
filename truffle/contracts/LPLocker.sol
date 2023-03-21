@@ -11,7 +11,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract Locker is Ownable, ReentrancyGuard {
+contract LPLocker is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
 
     uint256 public feePercentage;
