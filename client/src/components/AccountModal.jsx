@@ -58,7 +58,7 @@ const AccountModal = ({ isOpen, closeModal }) => {
                       Connected to :
                     </Text>
                     <Text fontSize='sm' color='green.400'>
-                      {connector.name}
+                      {connector?.name}
                     </Text>
                   </HStack>
                 </>

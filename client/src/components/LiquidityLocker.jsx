@@ -42,7 +42,7 @@ const LiquidityLocker = () => {
   const LockerABI = Locker.abi;
 
   const { config: LockerConfig } = usePrepareContractWrite({
-    address: '0x8a09816B46B816F54778555e2eDDC53418c58d5d',
+    address: '0xE490Db015DD30e42cBb519cBF5baD1d72000006f',
     abi: LockerABI,
     functionName: 'createLock',
     args: [
@@ -77,23 +77,22 @@ const LiquidityLocker = () => {
   });
   const { data: lockerData, write: lockerWrite } =
     useContractWrite(LockerConfig);
-  const { isLoading: isLockingLoading, isSuccess: isLockingSuccess } =
-    useWaitForTransaction({
-      hash: lockerData?.hash,
-      onSuccess(data, error) {
-        !toast.isActive(lockerData.hash) &&
-          toast({
-            id: lockerData.hash,
-            title: 'Locked Successfully',
-            description: 'Your Tokens have been locked!',
-            status: 'success',
-            duration: '5000',
-            isClosable: 'true',
-            position: 'bottom',
-          });
-      },
-    });
-
+  const { isLoading: isLockingLoading } = useWaitForTransaction({
+    hash: lockerData?.hash,
+    onSuccess(data, error) {
+      !toast.isActive(lockerData.hash) &&
+        toast({
+          id: lockerData.hash,
+          title: 'Locked Successfully',
+          description: 'Your Tokens have been locked!',
+          status: 'success',
+          duration: '5000',
+          isClosable: 'true',
+          position: 'bottom',
+        });
+    },
+  });
+  // console.log(process.env.REACT_APP_DEVELOPMENT_LOCKER_CONTRACT_ADDRESS);
   return (
     <Grid gap={5} templateRows='repeat(3,1fr)' placeItems='center'>
       <GridItem w='100%' h='100%' rowSpan={1}>

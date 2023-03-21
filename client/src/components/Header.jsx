@@ -9,10 +9,12 @@ import {
   HStack,
   Text,
   Tooltip,
+  IconButton,
+  useColorMode,
 } from '@chakra-ui/react';
 import ConnectWalletModal from './ConnectWalletModal';
 import AccountModal from './AccountModal';
-import { HamburgerIcon, CheckCircleIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CheckCircleIcon, SunIcon } from '@chakra-ui/icons';
 import { truncateAddress } from '../utils/utils';
 import { useAccount } from 'wagmi';
 import LocksDrawer from './LocksDrawer';
@@ -35,17 +37,22 @@ const Header = () => {
   } = useDisclosure();
 
   const { address, isConnected } = useAccount();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <>
       <Flex minWidth='max-content' alignItems='center' p={3}>
         <Box p='2'>
-          <Heading size='md' color='blue.800'>
+          <Heading
+            size='md'
+            color={colorMode === 'dark' ? 'blue.200' : 'blue.800'}
+          >
             Token Locker
           </Heading>
         </Box>
         <Spacer />
         <HStack>
+          <IconButton onClick={toggleColorMode} icon={<SunIcon />} />
           {!isConnected ? (
             <Button colorScheme='blue' onClick={onConnectWalletOpen}>
               Connect Wallet

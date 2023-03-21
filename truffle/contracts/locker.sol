@@ -254,6 +254,19 @@ contract Locker is Ownable, ReentrancyGuard {
         return allMyLocksIds;
     }
 
+    function getMyLocks(
+        address _userAddress
+    ) public view returns (Lock[] memory) {
+        uint256 myLocksLength = myLocks[_userAddress].length;
+        Lock[] memory allMyLocks = new Lock[](myLocksLength);
+        for (uint i = 0; i < myLocksLength; i++) {
+            uint256 index = myLocks[_userAddress][i].id;
+            Lock memory _lock = locks[index];
+            allMyLocks[i] = _lock;
+        }
+        return allMyLocks;
+    }
+
     /* Withdraw tokens from the contract. */
     function withdrawFees(
         address payable _withdrawalAddress
