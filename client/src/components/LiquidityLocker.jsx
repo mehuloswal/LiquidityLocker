@@ -320,10 +320,6 @@ const LiquidityLocker = () => {
                     {isErc20LockingLoading ? 'Locking...' : 'Lock'}
                   </Button>
                 </HStack>
-
-                <Badge colorScheme='blue' w='fit-content' variant='subtle'>
-                  LOCK Fee : 2.5%
-                </Badge>
               </Stack>
             </TabPanel>
             <TabPanel>
@@ -386,9 +382,6 @@ const LiquidityLocker = () => {
                     {isLpLockingLoading ? 'Locking...' : 'Lock'}
                   </Button>
                 </HStack>
-                <Badge colorScheme='blue' w='fit-content' variant='subtle'>
-                  LOCK Fee : 2.5%
-                </Badge>
               </Stack>
             </TabPanel>
           </TabPanels>
